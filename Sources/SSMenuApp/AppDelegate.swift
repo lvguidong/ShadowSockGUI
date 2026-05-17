@@ -5,7 +5,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuItemValidation {
     let manager = SSManager()
 
     func applicationDidFinishLaunching(_ notification: Notification) {
-        NSApp.setActivationPolicy(.regular)
+        NSApp.setActivationPolicy(.accessory)
 
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         if let icon = NSImage(systemSymbolName: "antenna.radiowaves.left.and.right", accessibilityDescription: "Shadowsocks") {
