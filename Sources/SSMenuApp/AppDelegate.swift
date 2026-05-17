@@ -172,6 +172,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuItemValidation {
     }
 
     @objc func quitApp() {
+        if manager.isRunning {
+            manager.stop()
+        }
         NSApplication.shared.terminate(nil)
     }
 
