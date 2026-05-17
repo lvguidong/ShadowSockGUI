@@ -1,42 +1,58 @@
 # SSMenuApp
 
-macOS 菜单栏应用，用于启动和停止 Shadowsocks-rust (sslocal)。
+A macOS menu bar app for launching and stopping [shadowsocks-rust](https://github.com/shadowsocks/shadowsocks-rust) (sslocal).
 
-## 前置要求
+[中文说明](README_ZH.md)
 
-需要先安装 [shadowsocks-rust](https://github.com/shadowsocks/shadowsocks-rust)：
+## Prerequisites
+
+You need to install [shadowsocks-rust](https://github.com/shadowsocks/shadowsocks-rust) first:
 
 ```bash
-# 使用 Homebrew 安装
+# Install via Homebrew
 brew install shadowsocks-rust
 
-# 或从源码编译
+# Or build from source
 cargo install shadowsocks-rust
 ```
 
-安装后确认 `sslocal` 可执行文件存在（通常在 `/opt/homebrew/bin/sslocal`）。
+Make sure the `sslocal` binary exists (usually at `/opt/homebrew/bin/sslocal`).
 
-## 功能
+## Features
 
-- 菜单栏图标一键启动/停止 sslocal
-- 支持自定义 sslocal 二进制路径和配置文件路径
-- 实时显示运行状态
+- One-click start/stop from the menu bar
+- Customizable sslocal binary path and config file path
+- Real-time running status indicator
 
-## 构建
+## Build
 
 ```bash
 swift build
 ```
 
-## 运行
+## Run
 
 ```bash
 swift run
 ```
 
-## 配置文件格式
+## Release
 
-配置文件为 JSON 格式，示例如下：
+```bash
+./build-app.sh
+```
+
+This generates `SSMenuApp-<VERSION>.app` and `SSMenuApp-<VERSION>.zip` ready for GitHub Release.
+
+### Bump Version
+
+1. Update `VERSION` in `build-app.sh`
+2. Update `APP_VERSION` in `Sources/SSMenuApp/AppDelegate.swift`
+3. Run `./build-app.sh`
+
+## Config File Format
+
+The config file is in JSON format. Example:
 
 ```json
 {
@@ -50,21 +66,25 @@ swift run
 }
 ```
 
-| 字段 | 说明 |
-|------|------|
-| `server` | 代理服务器地址（IP 或域名） |
-| `server_port` | 代理服务器端口 |
-| `local_address` | 本地监听地址，通常为 `127.0.0.1` |
-| `local_port` | 本地 SOCKS5 代理端口 |
-| `password` | 连接密码 |
-| `method` | 加密方式，推荐 `aes-256-gcm`、`chacha20-ietf-poly1305` |
-| `timeout` | 连接超时时间（秒） |
+| Field | Description |
+|-------|-------------|
+| `server` | Proxy server address (IP or domain) |
+| `server_port` | Proxy server port |
+| `local_address` | Local listening address, usually `127.0.0.1` |
+| `local_port` | Local SOCKS5 proxy port |
+| `password` | Connection password |
+| `method` | Encryption method, recommended `aes-256-gcm` or `chacha20-ietf-poly1305` |
+| `timeout` | Connection timeout in seconds |
 
-更多加密方式可参考：https://github.com/shadowsocks/shadowsocks-rust
+See [shadowsocks-rust](https://github.com/shadowsocks/shadowsocks-rust) for more encryption methods.
 
-## 使用说明
+## Usage
 
-1. 点击菜单栏的 **SS** 图标
-2. 首次使用点击 **sslocal** 输入 sslocal 路径（例如 `/opt/homebrew/bin/sslocal`）
-3. 点击 **Config** 输入配置文件路径（例如 `/path/to/config.json`）
-4. 点击 **Start** 启动，点击 **Stop** 停止
+1. Click the antenna icon in the menu bar
+2. First time: click **sslocal** to set the sslocal binary path (e.g. `/opt/homebrew/bin/sslocal`)
+3. Click **Config** to set your shadowsocks config file path (e.g. `/path/to/config.json`)
+4. Click **Start** to launch, **Stop** to terminate
+
+## License
+
+MIT
