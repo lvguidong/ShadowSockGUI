@@ -23,6 +23,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuItemValidation {
     }
 
     func buildMenu() {
+        manager.checkRunning()
         guard let menu = statusItem.menu else { return }
         menu.removeAllItems()
 
