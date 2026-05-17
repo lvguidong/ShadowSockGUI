@@ -1,5 +1,8 @@
 import Cocoa
 
+let APP_VERSION = "1.0"
+let APP_AUTHOR = "guidong"
+
 class AppDelegate: NSObject, NSApplicationDelegate, NSMenuItemValidation {
     var statusItem: NSStatusItem!
     let manager = SSManager()
@@ -76,11 +79,25 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuItemValidation {
         configMI.identifier = NSUserInterfaceItemIdentifier("configPath")
         menu.addItem(configMI)
 
+        // About
+        let aboutMI = NSMenuItem(title: "About", action: #selector(showAbout), keyEquivalent: "")
+        aboutMI.target = self
+        menu.addItem(aboutMI)
+
         // Quit
         menu.addItem(NSMenuItem.separator())
         let quitMI = NSMenuItem(title: "Quit", action: #selector(quitApp), keyEquivalent: "q")
         quitMI.target = self
         menu.addItem(quitMI)
+    }
+
+    @objc func showAbout() {
+        NSApp.activate(ignoringOtherApps: true)
+        let alert = NSAlert()
+        alert.messageText = "SSMenuApp"
+        alert.informativeText = "Version \(APP_VERSION)\n\nA macOS menu bar app for shadowsocks-rust.\n\nAuthor: \(APP_AUTHOR)"
+        alert.addButton(withTitle: "OK")
+        alert.runModal()
     }
 
     func validateMenuItem(_ menuItem: NSMenuItem) -> Bool {
