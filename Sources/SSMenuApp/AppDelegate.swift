@@ -1,6 +1,6 @@
 import Cocoa
 
-let APP_VERSION = "1.1"
+let APP_VERSION = "1.2"
 let APP_AUTHOR = "guidong"
 
 class AppDelegate: NSObject, NSApplicationDelegate, NSMenuItemValidation {

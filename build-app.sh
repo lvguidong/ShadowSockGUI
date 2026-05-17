@@ -2,7 +2,7 @@
 set -e
 
 APP_NAME="SSMenuApp"
-VERSION="1.1"
+VERSION="1.2"
 APP_DIR="${APP_NAME}-${VERSION}.app"
 ZIP_FILE="${APP_NAME}-${VERSION}.zip"
 CONTENTS="${APP_DIR}/Contents"
