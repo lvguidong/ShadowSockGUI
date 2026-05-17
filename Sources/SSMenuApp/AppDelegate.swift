@@ -92,12 +92,13 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuItemValidation {
     }
 
     @objc func showAbout() {
-        NSApp.activate(ignoringOtherApps: true)
-        let alert = NSAlert()
-        alert.messageText = "SSMenuApp"
-        alert.informativeText = "Version \(APP_VERSION)\n\nA macOS menu bar app for shadowsocks-rust.\n\nAuthor: \(APP_AUTHOR)"
-        alert.addButton(withTitle: "OK")
-        alert.runModal()
+        activateForModal {
+            let alert = NSAlert()
+            alert.messageText = "SSMenuApp"
+            alert.informativeText = "Version \(APP_VERSION)\n\nA macOS menu bar app for shadowsocks-rust.\n\nAuthor: \(APP_AUTHOR)"
+            alert.addButton(withTitle: "OK")
+            alert.runModal()
+        }
     }
 
     func validateMenuItem(_ menuItem: NSMenuItem) -> Bool {
@@ -134,36 +135,38 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuItemValidation {
     @objc func dummyAction() {}
 
     @objc func selectSSLocal() {
-        NSApp.activate(ignoringOtherApps: true)
-        let alert = NSAlert()
-        alert.messageText = "Set sslocal path"
-        alert.informativeText = "Enter the full path to the sslocal binary:"
-        let field = NSTextField(frame: NSRect(x: 0, y: 0, width: 300, height: 24))
-        field.stringValue = UserDefaults.standard.string(forKey: "ssLocalPath") ?? "/opt/homebrew/bin/sslocal"
-        alert.accessoryView = field
-        alert.addButton(withTitle: "OK")
-        alert.addButton(withTitle: "Cancel")
-        if alert.runModal() == .alertFirstButtonReturn {
-            let path = field.stringValue.trimmingCharacters(in: .whitespaces)
-            guard !path.isEmpty else { return }
-            UserDefaults.standard.set(path, forKey: "ssLocalPath")
+        activateForModal {
+            let alert = NSAlert()
+            alert.messageText = "Set sslocal path"
+            alert.informativeText = "Enter the full path to the sslocal binary:"
+            let field = NSTextField(frame: NSRect(x: 0, y: 0, width: 300, height: 24))
+            field.stringValue = UserDefaults.standard.string(forKey: "ssLocalPath") ?? "/opt/homebrew/bin/sslocal"
+            alert.accessoryView = field
+            alert.addButton(withTitle: "OK")
+            alert.addButton(withTitle: "Cancel")
+            if alert.runModal() == .alertFirstButtonReturn {
+                let path = field.stringValue.trimmingCharacters(in: .whitespaces)
+                guard !path.isEmpty else { return }
+                UserDefaults.standard.set(path, forKey: "ssLocalPath")
+            }
         }
     }
 
     @objc func selectConfig() {
-        NSApp.activate(ignoringOtherApps: true)
-        let alert = NSAlert()
-        alert.messageText = "Set config path"
-        alert.informativeText = "Enter the full path to your Shadowsocks config JSON:"
-        let field = NSTextField(frame: NSRect(x: 0, y: 0, width: 300, height: 24))
-        field.stringValue = UserDefaults.standard.string(forKey: "ssConfigPath") ?? ""
-        alert.accessoryView = field
-        alert.addButton(withTitle: "OK")
-        alert.addButton(withTitle: "Cancel")
-        if alert.runModal() == .alertFirstButtonReturn {
-            let path = field.stringValue.trimmingCharacters(in: .whitespaces)
-            guard !path.isEmpty else { return }
-            UserDefaults.standard.set(path, forKey: "ssConfigPath")
+        activateForModal {
+            let alert = NSAlert()
+            alert.messageText = "Set config path"
+            alert.informativeText = "Enter the full path to your Shadowsocks config JSON:"
+            let field = NSTextField(frame: NSRect(x: 0, y: 0, width: 300, height: 24))
+            field.stringValue = UserDefaults.standard.string(forKey: "ssConfigPath") ?? ""
+            alert.accessoryView = field
+            alert.addButton(withTitle: "OK")
+            alert.addButton(withTitle: "Cancel")
+            if alert.runModal() == .alertFirstButtonReturn {
+                let path = field.stringValue.trimmingCharacters(in: .whitespaces)
+                guard !path.isEmpty else { return }
+                UserDefaults.standard.set(path, forKey: "ssConfigPath")
+            }
         }
     }
 
@@ -171,10 +174,20 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuItemValidation {
         NSApplication.shared.terminate(nil)
     }
 
+    private func activateForModal(_ block: () -> Void) {
+        let savedPolicy = NSApp.activationPolicy()
+        NSApp.setActivationPolicy(.regular)
+        NSApp.activate(ignoringOtherApps: true)
+        block()
+        NSApp.setActivationPolicy(savedPolicy)
+    }
+
     private func showAlert(_ message: String) {
-        let alert = NSAlert()
-        alert.messageText = "Shadowsocks"
-        alert.informativeText = message
-        alert.runModal()
+        activateForModal {
+            let alert = NSAlert()
+            alert.messageText = "Shadowsocks"
+            alert.informativeText = message
+            alert.runModal()
+        }
     }
 }
